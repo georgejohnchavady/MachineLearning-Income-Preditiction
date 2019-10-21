@@ -5,11 +5,14 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 import csv
 
+# read the csv file
 train_data= pd.read_csv('tcd ml 2019-20 income prediction training (with labels).csv')
+
+#use fillna to fill empty cells and .median() to replace them with the median value of the column
 train_data['Age'].fillna((train_data['Age'].median()), inplace=True)
 train_data['Year of Record'].fillna((train_data['Year of Record'].median()), inplace=True)
 
-
+# use ffill to fill empty cells
 train_data['Profession'].fillna(method='ffill', inplace=True)
 train_data['Gender'].fillna(method='ffill', inplace=True)
 train_data['University Degree'].fillna(method='ffill', inplace=True)
@@ -27,6 +30,7 @@ test_data['University Degree'].fillna(method='ffill', inplace=True)
 test_data['Hair Color'].fillna(method='ffill', inplace=True)
 test_data.isnull().sum()/len(test_data)
 
+#Splitting the data for training and validation
 len_train = len(train_data)
 len_test_split=int(len_train/10)
 len_train_split = len_train-len_test_split
@@ -44,6 +48,7 @@ combineData_X = combineData[['Country','Age','Profession','University Degree','G
 
 combineData_Y = combineData[['Income in EUR']]
 
+#label encoding and one hot encoding the data
 le=LabelEncoder()
 combineData_X['Country']=le.fit_transform(combineData_X['Country'])
 combineData_X['Profession']=le.fit_transform(combineData_X['Profession'])
@@ -63,7 +68,7 @@ training_data_Y=combineData_Y.iloc[:len_train_split,:]
 
 from sklearn.ensemble import RandomForestRegressor
 
-
+#applying Random Forest Regressor
 model=RandomForestRegressor()
 
 # model=LinearRegression()
